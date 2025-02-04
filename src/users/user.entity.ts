@@ -1,7 +1,7 @@
 import { Task } from "src/tasks/task.entity";
 import { Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, OneToMany } from "typeorm";
 
-@Entity('user')
+@Entity()
 export class User{
     @PrimaryGeneratedColumn('uuid')
     id: string;
