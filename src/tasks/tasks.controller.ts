@@ -1,4 +1,4 @@
-import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards, Request } from '@nestjs/common';
+import { Controller, Get, Post, Body, Param, Put, Delete, UseGuards, Request, BadRequestException } from '@nestjs/common';
 import { TasksService } from './tasks.service';
 import { CreateTaskDto } from './dto/create-task.dto';
 import { Task } from './task.entity';
@@ -18,10 +18,13 @@ export class TasksController {
   }
 
   @Post()
-  createTask(@Body() body: { title: string; description: string },
-             @Request() req: ExpressRequest) {
-    const userId = (req.user as User).id;
-    return this.tasksService.createTask(body.title, body.description, userId);
+  async createTask(@Body() body: { title: string; description: string },
+                  @Request() req: ExpressRequest) {
+      const user = req.user as User;
+      if (!user || !user.id) {
+          throw new BadRequestException("User not found in request!"); // Kullanıcı olmadan Task eklenemez
+      }
+      return this.tasksService.createTask(body.title, body.description, user.id);
   }
 
   @Put('/:id')

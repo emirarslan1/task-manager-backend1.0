@@ -15,6 +15,6 @@ export class Task{
     @Column()
     status: string;
 
-    @ManyToOne(() => User, (user) => user.tasks, { eager: false })
-    user: User; 
+    @ManyToOne(() => User, (user) => user.tasks, { eager: false, onDelete: "CASCADE" })
+    user: User;
 }
